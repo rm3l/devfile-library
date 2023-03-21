@@ -23,12 +23,11 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"reflect"
 	"strings"
 
 	"github.com/devfile/api/v2/pkg/attributes"
 	registryLibrary "github.com/devfile/registry-support/registry-library/library"
-
-	"reflect"
 
 	devfileCtx "github.com/devfile/library/v2/pkg/devfile/parser/context"
 	"github.com/devfile/library/v2/pkg/devfile/parser/data"
@@ -142,14 +141,6 @@ func ParseDevfile(args ParserArgs) (d DevfileObj, err error) {
 	d, err = populateAndParseDevfile(d, &resolutionContextTree{}, tool, flattenedDevfile)
 	if err != nil {
 		return d, errors.Wrap(err, "failed to populateAndParseDevfile")
-	}
-
-	//set defaults only if we are flattening parent and parsing succeeded
-	if flattenedDevfile && err == nil {
-		err = setDefaults(d)
-		if err != nil {
-			return d, errors.Wrap(err, "failed to setDefaults")
-		}
 	}
 
 	convertUriToInlined := true
